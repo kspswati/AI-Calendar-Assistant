@@ -22,6 +22,9 @@ This project is an AI-powered calendar assistant built using **n8n**, **OpenAIâ€
 5. Add a system message with dynamic date info to give context to the AI.  
 6. Test the workflow by sending chat messages and verify events in your calendar.
 
+   ![Uploading image.pngâ€¦]()
+
+
 ## How to Use  
 - Send a message like: "Book a meeting with John tomorrow at 3 PM."  
 - The AI agent parses your command and schedules the event automatically.  

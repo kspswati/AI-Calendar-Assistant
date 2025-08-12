@@ -1,0 +1,132 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        -128
+      ],
+      "id": "aa535ef4-04ed-479a-a78f-55de5cce0bc2",
+      "name": "When chat message received",
+      "webhookId": "00ac45de-401b-4727-9697-58393fd49957"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are a calendar assistant. Your job is to check my availability and create new events for times that my calendar is free. \n\nYou are to use the Chat Model to process the user's requests, then check using the Check Availability tool on whether that time is free. You can use the Google Calendar tool to create a new event in my calendar if I am available.\n\nToday's date is {{DateTime.now().setZone('America/Phoenix').toFormat('dd LLL yyyy HH:mm:ss')}}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        -128
+      ],
+      "id": "50ab1264-4ab2-44fb-9771-979d3e3b4d8b",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        80
+      ],
+      "id": "c1c20459-0067-48a6-bb9d-ec0808f81f33",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Joimsbcuk1F08kV1",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "kspswati@gmail.com",
+          "mode": "list",
+          "cachedResultName": "kspswati@gmail.com"
+        },
+        "start": "={{ $fromAI('start_time') }}",
+        "end": "={{ $fromAI('end_time') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        368,
+        80
+      ],
+      "id": "a4370fc4-18cb-4450-8df0-c5c0c5168719",
+      "name": "Create an event in Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "c557oWtZ7A7bgOQ2",
+          "name": "Google Calendar account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1387d9c1-c108-41b8-8c0a-5bb5673f1672",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6c0d77d63778d00a679e94f9cd0af66f1318a339960ec3eb50c88636c8953ad4"
+  },
+  "id": "styYwd7BqSU9ahWg",
+  "tags": []
+}
